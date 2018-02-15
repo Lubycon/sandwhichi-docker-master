@@ -1,6 +1,6 @@
 # README #
 
-##### 본 문서에는 sandwhichi Docker Service의 구동법이 명세되어있습니다
+##### 본 문서에는 Sandwhichi Docker Master 구동법이 명세되어있습니다
 
 ### 서비스 실행법 ###
 
@@ -17,12 +17,30 @@ $ cp .env.example .env
 
 - 로컬호스트에서의 .env 예제
 ```sh
-# For local
+# For local, without projects
 COMPOSE_FILE=docker-compose.yml:./env/local.yml
+# For local, with projects
+# 아래의 설정대로 실생시키고 싶은 경우, 상대경로 ../api와 ../frontend에 프로젝트가 존재하는지 확인하세요.
+COMPOSE_FILE=docker-compose.yml:./env/local.yml:../api/docker-compose.yml:../frontend/docker-compose.yml
 # For Developement Server
 # COMPOSE_FILE=docker-compose.yml:./env/dev.yml
 # For Production Server
 # COMPOSE_FILE=docker-compose.yml:./env/prod.yml
+
+# 운영환경에 맞게 APP_ENV를 설정합니다. local, dev, prod 중에 선택하세요
+APP_ENV=local
+
+# 프로젝트가 실행될 환경의 도메인 주소를 설정합니다.
+API_DOMAIN_NAME=local.api.sandwhichi.com
+FRONT_DOMAIN_NAME=local.sandwhichi.com
+
+# Docker master가 하위 프로젝트를 include하기위해, docker-compose.yml 파일이 존재하는 디렉토리를 설정해주세요
+API_DOCKERFILE_DIR=../api
+FRONT_DOCKERFILE_DIR=../frontend
+
+# 가상머신 속에서 프로젝트의 위치를 절대 경로로 지정합니다.
+# API project의 경우 /var/www/api로 고정되어있습니다.
+API_PROJECT_ROOT_PATH=/var/www/api
 
 # Sentry
 # Sentry를 설치하고 싶은 경우 아래 값을 모두 입력하세요.
@@ -44,6 +62,13 @@ BITBUCKET_PASSWORD=
 
 ### 커맨드 목록
 > 모든 docker-compose 명령어는 docker-compose파일이 존재하는 디렉토리에서만 실행 할 수 있습니다.
+
+#### Docker-master first build
+> Docker-master를 다운받고, env를 설정한 직후에는 up을 할 수 없습니다.
+> build를 먼저 실행해주세요. 처음 한번만 실행하면 됩니다.
+```sh
+$ docker-compose build
+```
 
 #### 서비스 생성
 > 서비스의 컨테이너가 존재하지 않을때 실행합니다.
