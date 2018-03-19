@@ -6,6 +6,20 @@
 
 > Docker 설치, 세팅 방법에 대한 설명은 제외되어있습니다.
 
+### Information ###
+docker master를 이용해서 front-end 서버와 api를 띄우는 경우, 종종 api 내에서 일부 디렉토리가 생성되지 않아 제대로 실행되지 않을 때가 있다. 그럴 땐 다음과 같이 해결하면 된다. 일단 docker image가 build까지 되어 컨테이너를 띄운 상태라는 가정하에 기술한다. 
+```bash
+# 실행되어 있는 api 컨테이너로 접속한다 
+$ docker exec -it sdw_api_1 /bin/bash
+
+# storage 안으로 들어가 Laravel 관련 디렉토리를 생성시켜준다.
+$ cd storage
+$ mkdir framework
+
+$ cd framework
+$ mkdir sessions views cache
+```
+
 #### .env 파일생성
 > 운영 환경에 따라 다른 커맨드를 요구합니다. 프로젝트명을 지정하거나, 필요에 따라 환경별 yml파일을 머지해야하는데,
 > 번거롭기 때문에 .env파일을 작성하여 보다 쉽게 운영합니다.
